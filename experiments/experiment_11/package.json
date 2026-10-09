@@ -1,0 +1,19 @@
+{
+  "name": "experiment-11",
+  "version": "1.0.0",
+  "description": "Experiment 11: Practicing with CI/CD using GitHub Actions",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node test/app.test.js"
+  },
+  "keywords": [
+    "ci-cd",
+    "github-actions",
+    "node",
+    "testing",
+    "deployment"
+  ],
+  "author": "SafeWalk AI Team",
+  "license": "MIT"
+}

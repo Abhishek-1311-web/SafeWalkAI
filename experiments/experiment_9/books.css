@@ -1,0 +1,30 @@
+catalog {
+  display: block;
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+book {
+  display: block;
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+title {
+  display: block;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+author {
+  display: block;
+  font-style: italic;
+  color: #555;
+}
+
+price::before {
+  content: 'Price: Rs. ';
+  font-weight: bold;
+}

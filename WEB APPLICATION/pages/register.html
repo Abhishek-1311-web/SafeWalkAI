@@ -1,0 +1,73 @@
+<!-- SafeWalk AI - Register Page (Refactored to direct $scope binding, stripped vm. syntax) -->
+<div class="register-container fade-in" style="min-height:90vh; display:flex; align-items:center; justify-content:center; padding:1.5rem 1rem;">
+  
+  <div class="glass-card" style="width:100%; max-width:640px; padding:2.5rem; border-radius:24px;">
+    
+    <div style="text-align:center; margin-bottom:2rem;">
+      <div class="brand-icon" style="margin:0 auto 1rem auto;">
+        <i class="fa-solid fa-shield-cat"></i>
+      </div>
+      <h2 style="font-size:1.8rem; font-weight:800;">Create SafeWalk Account</h2>
+      <p style="color:var(--text-muted); font-size:0.9rem;">Join thousands of women walking safely with AI protection.</p>
+    </div>
+
+    <!-- Error Alert Message -->
+    <div class="badge badge-danger" ng-if="errorMessage" style="width:100%; padding:0.75rem; font-size:0.85rem; margin-bottom:1.25rem; border-radius:8px; display:flex; align-items:center; gap:0.5rem;">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Registration Form bound directly to $scope -->
+    <form ng-submit="register()">
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;" class="grid-2">
+        <div class="form-group">
+          <label class="form-label"><i class="fa-solid fa-user"></i> Full Name</label>
+          <input type="text" class="form-control" placeholder="Sophia Martinez" ng-model="user.name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><i class="fa-solid fa-envelope"></i> Email Address</label>
+          <input type="email" class="form-control" placeholder="sophia@example.com" ng-model="user.email" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i class="fa-solid fa-phone"></i> Mobile Phone Number</label>
+        <input type="tel" class="form-control" placeholder="+1 (555) 000-0000" ng-model="user.phone" required>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;" class="grid-2">
+        <div class="form-group">
+          <label class="form-label"><i class="fa-solid fa-key"></i> Create Password</label>
+          <input type="password" class="form-control" placeholder="••••••••" ng-model="user.password" required>
+          <!-- Password Strength Meter Custom Directive -->
+          <password-strength password="user.password"></password-strength>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><i class="fa-solid fa-key"></i> Confirm Password</label>
+          <input type="password" class="form-control" placeholder="••••••••" ng-model="user.confirmPassword" required>
+        </div>
+      </div>
+
+      <div style="border-top:1px dashed var(--glass-border); padding-top:1rem; margin-top:0.5rem; margin-bottom:1.5rem;">
+        <label class="form-label" style="color:var(--primary); font-weight:700;"><i class="fa-solid fa-user-shield"></i> Primary Emergency Guardian Phone</label>
+        <input type="tel" class="form-control" placeholder="+1 (555) 999-8888 (Parent, Partner, Friend)" ng-model="user.emergencyPhone">
+        <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.25rem;">This guardian will receive instant notifications during SOS alerts.</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-round btn-ripple" style="width:100%; padding:0.9rem; font-size:1rem;" ng-disabled="isLoading">
+        <span ng-if="!isLoading"><i class="fa-solid fa-user-plus"></i> Complete Registration & Protect Account</span>
+        <span ng-if="isLoading"><i class="fa-solid fa-spinner fa-spin"></i> Contacting External MongoDB Atlas...</span>
+      </button>
+
+    </form>
+
+    <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color:var(--text-muted);">
+      Already registered? <a href="#!/login" style="color:var(--primary); font-weight:700;">Sign In</a>
+    </div>
+
+  </div>
+
+</div>

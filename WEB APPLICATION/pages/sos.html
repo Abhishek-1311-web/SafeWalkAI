@@ -1,0 +1,66 @@
+<!-- SafeWalk AI - Emergency SOS Hub -->
+<div class="sos-container fade-in" style="min-height:85vh; display:flex; align-items:center; justify-content:center; padding:1.5rem 1rem;">
+  
+  <div class="glass-card" style="width:100%; max-width:680px; padding:3rem 2rem; border-radius:28px; text-align:center; background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(254,242,242,0.95)); border:2px solid rgba(239,68,68,0.3);">
+    
+    <span class="badge badge-danger" style="font-size:0.9rem; padding:0.5rem 1.25rem; margin-bottom:1.5rem;">
+      <i class="fa-solid fa-triangle-exclamation"></i> EMERGENCY RESPONSE HUB
+    </span>
+
+    <h1 style="font-size:2.2rem; font-weight:800; color:var(--text-dark); margin-bottom:0.5rem;">
+      Instant Emergency SOS Dispatch
+    </h1>
+
+    <p style="color:var(--text-muted); font-size:0.95rem; max-width:480px; margin:0 auto 2.5rem auto;">
+      Pressing SOS triggers a 5-second countdown audio alarm, transmits your exact GPS location to 911/Police, and broadcasts SMS alerts to emergency contacts.
+    </p>
+
+    <!-- Large Red Pulsing SOS Trigger Button -->
+    <div style="margin:2rem 0; display:flex; justify-content:center; align-items:center;">
+      <button class="pulse-sos" 
+              ng-click="vm.triggerSOS()" 
+              style="width:200px; height:200px; border-radius:50%; background:linear-gradient(135deg, #EF4444, #EC4899); border:6px solid white; color:white; font-size:2.2rem; font-weight:900; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; cursor:pointer; box-shadow:0 20px 40px rgba(239, 68, 68, 0.4); transition:all 0.2s;">
+        <i class="fa-solid fa-hand-fist" style="font-size:3rem;"></i>
+        <span>SOS</span>
+      </button>
+    </div>
+
+    <!-- Countdown Timer Overlay when Active -->
+    <div ng-if="vm.sosState.status === 'Counting'" style="margin:1.5rem 0; padding:1.5rem; background:rgba(239,68,68,0.1); border-radius:18px; border:1px solid rgba(239,68,68,0.3);">
+      <h2 style="font-size:2.5rem; font-weight:900; color:#EF4444;">Dispatching in {{ vm.sosState.countdown }}s</h2>
+      <p style="font-size:0.85rem; color:var(--text-dark); margin-bottom:1rem;">Audio beacon active. Tap cancel below if triggered accidentally.</p>
+      <button class="btn btn-secondary btn-round" ng-click="vm.cancelSOS()" style="padding:0.75rem 2rem; font-size:1rem; font-weight:700;">
+        <i class="fa-solid fa-xmark"></i> CANCEL SOS ALERT
+      </button>
+    </div>
+
+    <!-- Dispatch Status Cards Grid -->
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem; margin-top:2rem;" class="grid-3">
+      <div class="glass-card" style="padding:1rem; text-align:center;" ng-class="{'badge-success': vm.sosState.dispatches.police}">
+        <i class="fa-solid fa-user-police" style="font-size:1.8rem; color:var(--primary); margin-bottom:0.5rem;"></i>
+        <div style="font-size:0.85rem; font-weight:700;">Local Police</div>
+        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+          {{ vm.sosState.dispatches.police ? 'DISPATCHED' : 'Standby Mode' }}
+        </div>
+      </div>
+
+      <div class="glass-card" style="padding:1rem; text-align:center;" ng-class="{'badge-success': vm.sosState.dispatches.hospital}">
+        <i class="fa-solid fa-hospital" style="font-size:1.8rem; color:var(--accent); margin-bottom:0.5rem;"></i>
+        <div style="font-size:0.85rem; font-weight:700;">Nearest Medical</div>
+        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+          {{ vm.sosState.dispatches.hospital ? 'DISPATCHED' : 'Standby Mode' }}
+        </div>
+      </div>
+
+      <div class="glass-card" style="padding:1rem; text-align:center;" ng-class="{'badge-success': vm.sosState.dispatches.guardians}">
+        <i class="fa-solid fa-users" style="font-size:1.8rem; color:var(--secondary); margin-bottom:0.5rem;"></i>
+        <div style="font-size:0.85rem; font-weight:700;">Guardians SMS</div>
+        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+          {{ vm.sosState.dispatches.guardians ? 'SENT' : 'Standby Mode' }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,87 @@
+<div class="crime-map-container fade-in">
+  
+  <div style="display:grid; grid-template-columns:1fr 340px; gap:1.5rem;" class="grid-2">
+
+    <div class="glass-card" style="display:flex; flex-direction:column; padding:1rem; height:calc(100vh - 140px);">
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+          <h2 style="font-size:1.2rem; font-weight:800;"><i class="fa-solid fa-map-location-dot" style="color:var(--accent);"></i> Crime Hotspot Map</h2>
+          <span class="badge badge-danger">Heatmap Active</span>
+        </div>
+
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+          <select class="form-control" style="padding:0.4rem 0.8rem; font-size:0.8rem; width:auto;" ng-model="vm.selectedCategory">
+            <option value="All">All Incidents</option>
+            <option value="Poor Lighting">Poor Lighting</option>
+            <option value="Harassment">Harassment</option>
+            <option value="Theft">Theft Hotspots</option>
+          </select>
+
+          <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;">
+            <i class="fa-solid fa-calendar-days"></i> Last 30 Days
+          </button>
+        </div>
+      </div>
+
+      <div interactive-map id="crime-hotspot-map" map-mode="crime" style="flex:1; border-radius:14px; overflow:hidden;"></div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:1.25rem; height:calc(100vh - 140px); overflow-y:auto;">
+      
+      <div class="glass-card" style="border-left:4px solid var(--accent); background:linear-gradient(135deg, rgba(236, 72, 153, 0.05), rgba(124, 58, 237, 0.05));">
+        <h3 style="font-size:0.95rem; font-weight:700; color:var(--accent); margin-bottom:0.35rem;">
+          <i class="fa-solid fa-lightbulb"></i> AI Crime Prediction Alert
+        </h3>
+        <p style="font-size:0.82rem; color:var(--text-dark); line-height:1.5;">{{ vm.aiSuggestion }}</p>
+      </div>
+
+      <div class="glass-card">
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem;"><i class="fa-solid fa-flag" style="color:var(--primary);"></i> Report Safety Hazard</h3>
+        <form ng-submit="vm.submitReport()">
+          <div class="form-group" style="margin-bottom:0.75rem;">
+            <label class="form-label" style="font-size:0.8rem;">Hazard Type</label>
+            <select class="form-control" style="padding:0.5rem; font-size:0.85rem;" ng-model="vm.newReport.type">
+              <option value="Poor Lighting">Broken Streetlight / Dark</option>
+              <option value="Attempted Harassment">Harassment / Stalking</option>
+              <option value="Theft Hotspot">Theft / Snatching</option>
+              <option value="Isolated Tunnel">Unsafe Tunnel / Alley</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom:0.75rem;">
+            <label class="form-label" style="font-size:0.8rem;">Description</label>
+            <textarea class="form-control" rows="2" style="font-size:0.85rem;" placeholder="Detail what happened or what looks unsafe..." ng-model="vm.newReport.description" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-round" style="width:100%; font-size:0.85rem; padding:0.6rem;">
+            <i class="fa-solid fa-paper-plane"></i> Submit Incident
+          </button>
+        </form>
+      </div>
+
+      <div class="glass-card" style="flex:1; display:flex; flex-direction:column;">
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem;"><i class="fa-solid fa-list" style="color:var(--primary);"></i> Community Reports</h3>
+        
+        <div style="display:flex; flex-direction:column; gap:0.75rem; overflow-y:auto;">
+          <div class="glass-card" ng-repeat="crime in vm.crimes | filter:(vm.selectedCategory === 'All' ? '' : vm.selectedCategory)" style="padding:0.75rem; border-radius:12px; background:white;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+              <span style="font-size:0.82rem; font-weight:700; color:var(--text-dark);">{{ crime.type }}</span>
+              <span class="badge" ng-class="crime.severity | severityBadge">{{ crime.severity }}</span>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.35rem;">{{ crime.description }}</p>
+            <div style="font-size:0.7rem; color:var(--text-light); display:flex; justify-content:space-between; align-items:center;">
+              <span><i class="fa-solid fa-clock"></i> {{ crime.date | timeAgo }} ({{ crime.time }})</span>
+              <button class="btn btn-secondary" style="padding:0.15rem 0.4rem; font-size:0.68rem; color:var(--danger);" ng-click="vm.deleteReport(crime.id || crime._id)" title="Delete Report">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

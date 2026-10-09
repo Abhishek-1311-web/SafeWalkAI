@@ -1,0 +1,15 @@
+{
+  "name": "experiment-13",
+  "version": "1.0.0",
+  "description": "Experiment 13: Practicing with Web Services (SOAP vs REST)",
+  "main": "soap_server.js",
+  "scripts": {
+    "start:soap": "node soap_server.js",
+    "start:rest": "node rest_server.js",
+    "test": "node test_client.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "soap": "^1.0.0"
+  }
+}

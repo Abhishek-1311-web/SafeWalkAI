@@ -1,0 +1,14 @@
+{
+  "name": "experiment-14",
+  "version": "1.0.0",
+  "description": "Experiment 14: Implementing a Web Service that Interacts with a Database (Node.js/Express + MongoDB/Mongoose)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test_crud.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.1"
+  }
+}

@@ -1,0 +1,102 @@
+
+<div class="contacts-container fade-in">
+  <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+    <div>
+      <h2 style="font-size:1.5rem; font-weight:800;"><i class="fa-solid fa-address-book" style="color:var(--primary);"></i> Emergency Contacts</h2>
+      <p style="font-size:0.85rem; color:var(--text-muted);">Trusted guardians who receive live telemetry and SOS broadcasts.</p>
+    </div>
+
+    <div style="display:flex; gap:1rem; align-items:center;">
+      <div class="search-box" style="width:240px;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search contacts..." ng-model="vm.searchQuery">
+      </div>
+
+      <button class="btn btn-primary btn-round btn-ripple" ng-click="vm.openAddModal()">
+        <i class="fa-solid fa-user-plus"></i> Add New Contact
+      </button>
+    </div>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem;" class="grid-3">
+    <div class="glass-card" ng-repeat="c in vm.contacts | filter:vm.searchQuery" style="display:flex; flex-direction:column; justify-space-between; padding:1.25rem;">
+      
+      <div>
+        <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem;">
+          <img ng-src="{{ c.photo }}" style="width:54px; height:54px; border-radius:50%; object-fit:cover; border:2px solid var(--primary);" alt="Avatar">
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <h3 style="font-size:1.05rem; font-weight:700;">{{ c.name }}</h3>
+              <span class="badge badge-success" ng-if="c.isPrimary" style="font-size:0.65rem;">Primary</span>
+            </div>
+            <span class="badge badge-primary" style="font-size:0.7rem; margin-top:2px;">{{ c.relation | capitalize }}</span>
+          </div>
+        </div>
+
+        <div style="font-size:0.85rem; color:var(--text-dark); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+          <i class="fa-solid fa-phone" style="color:var(--primary);"></i> {{ c.phone | phoneFormat }}
+        </div>
+      </div>
+
+      <div style="display:flex; gap:0.5rem; border-top:1px solid var(--glass-border); padding-top:0.85rem;">
+        <button class="btn btn-primary" style="flex:1; font-size:0.78rem; padding:0.45rem;" ng-click="vm.callContact(c)" title="Call Guardian">
+          <i class="fa-solid fa-phone"></i> Call
+        </button>
+        <button class="btn btn-secondary" style="flex:1; font-size:0.78rem; padding:0.45rem;" ng-click="vm.sendAlertSMS(c)" title="Send Alert SMS">
+          <i class="fa-solid fa-comment-sms"></i> SMS
+        </button>
+        <button class="btn btn-secondary" style="padding:0.45rem 0.65rem; color:var(--primary);" ng-click="vm.openEditModal(c)" title="Edit existing emergency contact details using the pencil icon">
+          <i class="fa-solid fa-pencil"></i>
+        </button>
+        <button class="btn btn-secondary" style="padding:0.45rem 0.65rem; color:var(--danger);" ng-click="vm.deleteContact(c.id || c._id)" title="Remove an emergency contact from the network using the trash can icon">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Add / Edit Guardian Modal (Create & Update CRUD) -->
+  <div ng-if="vm.showModal" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.6); backdrop-filter:blur(6px); z-index:999; display:flex; align-items:center; justify-content:center; padding:1rem;" class="fade-in">
+    <div class="glass-card" style="width:100%; max-width:480px; padding:2rem; background:white;">
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <h3 style="font-size:1.3rem; font-weight:800;">
+          <i class="fa-solid" ng-class="vm.isEditing ? 'fa-user-pen' : 'fa-user-plus'" style="color:var(--primary);"></i> 
+          {{ vm.isEditing ? 'Edit Emergency Guardian' : 'Add Emergency Guardian' }}
+        </h3>
+        <button ng-click="vm.closeAddModal()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form ng-submit="vm.saveContact()">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" placeholder="Shamuga Perumal" ng-model="vm.newContact.name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-control" placeholder="9363825253" ng-model="vm.newContact.phone" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Relationship</label>
+          <input type="text" class="form-control" placeholder="Mother, Sister, Best Friend..." ng-model="vm.newContact.relation" required>
+        </div>
+
+        <div class="form-group" style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+          <input type="checkbox" id="isPrimaryCheck" ng-model="vm.newContact.isPrimary" style="width:16px; height:16px; accent-color:var(--primary);">
+          <label for="isPrimaryCheck" class="form-label" style="margin-bottom:0; cursor:pointer; font-size:0.85rem;">Set as Primary Guardian</label>
+        </div>
+
+        <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+          <button type="button" class="btn btn-secondary" style="flex:1;" ng-click="vm.closeAddModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex:1;">
+            {{ vm.isEditing ? 'Update Guardian' : 'Save Guardian' }}
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+</div>

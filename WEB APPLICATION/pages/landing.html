@@ -1,0 +1,112 @@
+<!-- SafeWalk AI - Landing Page -->
+<div class="landing-container fade-in" style="max-width:980px; margin:0 auto; padding:2rem 1rem;">
+
+  <!-- Hero Section -->
+  <section style="display:flex; align-items:center; justify-content:space-between; gap:3rem; padding:3rem 0;" class="hero-split" when-visible anim-duration="800">
+    
+    <div style="flex:1;">
+      <span class="badge badge-primary" style="font-size:0.9rem; padding:0.5rem 1rem; margin-bottom:1.5rem; display:inline-flex; align-items:center; gap:8px;">
+        <i class="fa-solid fa-sparkles"></i> AI-Powered Personal Safety Companion
+      </span>
+
+      <h1 style="font-size:3.5rem; font-weight:800; line-height:1.15; margin-bottom:1.25rem;">
+        Walk with Confidence, <br>
+        <span style="background:linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+          Powered by AI
+        </span>
+      </h1>
+
+      <p style="font-size:1.15rem; color:var(--text-muted); line-height:1.6; margin-bottom:2rem; max-width:540px;">
+        SafeWalk AI provides real-time intelligent navigation, continuous live location tracking, predictive crime mapping, and instant SOS dispatch to keep you protected every step of the way.
+      </p>
+
+      <div style="display:flex; gap:1.25rem; align-items:center;" class="hero-buttons">
+        <button class="btn btn-primary btn-lg btn-round btn-ripple" ng-click="vm.startWalk()">
+          <i class="fa-solid fa-shield-heart"></i> Start Safe Walk
+        </button>
+        <a href="#!/login" class="btn btn-secondary btn-lg btn-round btn-ripple">
+          <i class="fa-solid fa-user-lock"></i> Login / Register
+        </a>
+      </div>
+    </div>
+
+    <!-- AI Phone Mockup -->
+    <div style="flex:1; display:flex; justify-content:center;" class="hero-mockup">
+      <div class="glass-card float-bg" style="width:300px; height:580px; border-radius:36px; padding:12px; border:4px solid rgba(255,255,255,0.8); box-shadow:0 25px 50px -12px rgba(79, 70, 229, 0.25); background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(243,232,255,0.9));">
+        
+        <!-- Phone Screen Mockup -->
+        <div style="background:#0F172A; width:100%; height:100%; border-radius:28px; padding:1.25rem; color:white; display:flex; flex-direction:column; justify-space-between; position:relative; overflow:hidden;">
+          
+          <!-- Mock Notch -->
+          <div style="width:100px; height:18px; background:#000; border-radius:0 0 10px 10px; margin:0 auto -10px auto;"></div>
+
+          <div style="margin-top:1.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <span style="font-size:0.75rem; color:#94A3B8;">GPS ACTIVE</span>
+              <span class="badge badge-success" style="font-size:0.65rem;"><i class="fa-solid fa-circle" style="font-size:6px;"></i> Live Protection</span>
+            </div>
+
+            <!-- Mini Mockup Route Card -->
+            <div style="background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); padding:1rem; border-radius:16px; border:1px solid rgba(255,255,255,0.15);">
+              <div style="font-size:0.8rem; font-weight:700; color:#A5B4FC;">SAFE ROUTE ENGAGED</div>
+              <div style="font-size:1.2rem; font-weight:800; margin:4px 0;">Destination: Home</div>
+              <div style="font-size:0.75rem; color:#CBD5E1;"><i class="fa-solid fa-clock"></i> ETA: 12 min (98% Safe Route)</div>
+            </div>
+          </div>
+
+          <!-- Radar Graphic -->
+          <div style="position:relative; width:180px; height:180px; margin:1rem auto; display:flex; align-items:center; justify-content:center;">
+            <div style="width:140px; height:140px; border-radius:50%; border:2px dashed rgba(79, 70, 229, 0.5); position:absolute;" class="radar-sweep"></div>
+            <div style="width:100px; height:100px; border-radius:50%; background:rgba(79, 70, 229, 0.2); display:flex; align-items:center; justify-content:center;">
+              <i class="fa-solid fa-person-walking" style="font-size:2rem; color:#818CF8;"></i>
+            </div>
+          </div>
+
+          <!-- SOS Trigger Button Mock -->
+          <div style="text-align:center; margin-bottom:0.5rem;">
+            <a href="#!/sos" class="btn btn-danger btn-round pulse-sos" style="width:100%; font-size:0.9rem; padding:0.75rem;">
+              <i class="fa-solid fa-triangle-exclamation"></i> PRESS FOR SOS
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Feature Cards Grid (6 Spec Features) -->
+  <section style="margin:4rem 0;">
+    <div style="text-align:center; margin-bottom:3rem;" when-visible>
+      <h2 style="font-size:2.25rem; font-weight:800;">Smart AI Security Features</h2>
+      <p style="color:var(--text-muted);">Engineered with next-generation safety technology for ultimate peace of mind.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem;" class="grid-3" when-visible anim-duration="700">
+      <div class="glass-card" ng-repeat="feat in vm.features">
+        <div style="width:50px; height:50px; border-radius:14px; background:linear-gradient(135deg, var(--primary-light), var(--accent-light)); display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:1.5rem; margin-bottom:1.25rem;">
+          <i class="fa-solid" ng-class="feat.icon"></i>
+        </div>
+        <h3 style="font-size:1.2rem; font-weight:700; margin-bottom:0.5rem;">{{ feat.title }}</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.5;">{{ feat.desc }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Statistics Section -->
+  <section class="glass-card" style="margin:4rem 0; padding:2.5rem; background:linear-gradient(135deg, var(--primary), var(--secondary)); color:white;">
+    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1.5rem; text-align:center;" class="grid-4">
+      <div ng-repeat="st in vm.stats">
+        <div style="font-size:2.5rem; font-weight:800; margin-bottom:0.25rem;">{{ st.value }}</div>
+        <div style="font-size:0.9rem; opacity:0.85; font-weight:500;">{{ st.label }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid var(--glass-border); padding:2rem 0; text-align:center; color:var(--text-muted); font-size:0.9rem;">
+    <p>© 2026 SafeWalk AI. Empowering Women Safety Everywhere with Artificial Intelligence.</p>
+  </footer>
+
+</div>

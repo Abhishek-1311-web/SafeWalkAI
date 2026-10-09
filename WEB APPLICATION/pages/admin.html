@@ -1,0 +1,379 @@
+<!-- SafeWalk AI - Dedicated Admin Operations Command Center -->
+<div class="admin-container fade-in" style="max-width:1200px; margin:0 auto; padding:1.5rem 1rem;">
+
+  <!-- Header Operations Banner -->
+  <div class="glass-card" style="margin-bottom:2rem; background:linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95)); border:1px solid rgba(236, 72, 153, 0.3); color:#F8FAFC; padding:1.75rem 2rem; border-radius:20px; box-shadow:0 12px 30px rgba(0,0,0,0.25);">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.25rem;">
+      <div>
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.4rem;">
+          <span class="badge" style="background:#EC4899; color:white; font-size:0.75rem; letter-spacing:0.5px;">
+            <i class="fa-solid fa-shield-halved"></i> RBAC ADMINISTRATOR PRIVILEGES
+          </span>
+          <span class="badge" style="background:rgba(16, 185, 129, 0.2); color:#10B981; border:1px solid #10B981; font-size:0.75rem;">
+            <i class="fa-solid fa-circle-check"></i> CLUSTER FAIL-CLOSED ACTIVE
+          </span>
+        </div>
+        <h1 style="font-size:1.85rem; font-weight:800; margin:0; color:#FFFFFF;">Admin Operations Command Center</h1>
+        <p style="color:#94A3B8; font-size:0.88rem; margin-top:0.35rem; margin-bottom:0;">
+          Direct governance over external MongoDB Atlas user lifecycle, crime incident verification queues, and system security clusters.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+        <button class="btn btn-secondary btn-round" ng-click="vm.loadAdminData()" title="Refresh System Metrics" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2);">
+          <i class="fa-solid fa-rotate" ng-class="{'fa-spin': vm.isLoading}"></i> Refresh Metrics
+        </button>
+        <!-- The prominent Verify Crime Incidents Button -->
+        <button class="btn btn-primary btn-round btn-ripple" ng-click="vm.openVerifyIncidentsModal()" style="background:linear-gradient(135deg, #EC4899, #7C3AED); border:none; padding:0.65rem 1.4rem; font-size:0.9rem;" title="Review and verify reported community incidents">
+          <i class="fa-solid fa-clipboard-check"></i> Verify Crime Incidents
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- High-Level System Metrics Cards (4 Metrics) -->
+  <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1.25rem; margin-bottom:2rem;" class="grid-4">
+    
+    <!-- 1. Total Registered Users Metric -->
+    <div class="glass-card" style="padding:1.4rem; text-align:center; border-top:4px solid var(--primary);">
+      <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Total Registered Users</div>
+      <div style="font-size:2.2rem; font-weight:800; color:var(--primary); margin:0.3rem 0;">{{ vm.stats.users.total || vm.users.length }}</div>
+      <div style="font-size:0.75rem; color:var(--text-muted); display:flex; justify-content:center; gap:8px;">
+        <span style="color:#10B981;"><i class="fa-solid fa-bolt"></i> {{ vm.stats.users.active || vm.users.length }} Active</span>
+        <span>•</span>
+        <span style="color:#3B82F6;"><i class="fa-solid fa-circle-check"></i> Verified</span>
+      </div>
+    </div>
+
+    <!-- 2. Administrators Metric -->
+    <div class="glass-card" style="padding:1.4rem; text-align:center; border-top:4px solid #EC4899;">
+      <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Administrators</div>
+      <div style="font-size:2.2rem; font-weight:800; color:#EC4899; margin:0.3rem 0;">{{ vm.stats.users.admins || 1 }}</div>
+      <div style="font-size:0.75rem; color:#EC4899; font-weight:600;">Full System Governance</div>
+    </div>
+
+    <!-- 3. Total Reported Incidents Metric -->
+    <div class="glass-card" style="padding:1.4rem; text-align:center; border-top:4px solid #F59E0B;">
+      <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Reported Incidents</div>
+      <div style="font-size:2.2rem; font-weight:800; color:#F59E0B; margin:0.3rem 0;">{{ vm.stats.crimes.total || 4 }}</div>
+      <div style="font-size:0.75rem; color:var(--text-muted);">
+        <span style="color:#10B981; font-weight:700;">{{ vm.stats.crimes.verified || 1 }} Verified</span>
+        <span>• {{ vm.stats.crimes.pending || 3 }} Pending</span>
+      </div>
+    </div>
+
+    <!-- 4. Security Cluster Status Metric -->
+    <div class="glass-card" style="padding:1.4rem; text-align:center; border-top:4px solid #10B981;">
+      <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Security Cluster Status</div>
+      <div style="font-size:1.35rem; font-weight:800; color:#10B981; margin:0.6rem 0; display:flex; align-items:center; justify-content:center; gap:6px;">
+        <i class="fa-solid fa-database"></i> Fail-Closed Active
+      </div>
+      <div style="font-size:0.75rem; color:var(--text-muted);">External MongoDB Atlas</div>
+    </div>
+
+  </div>
+
+  <!-- User Lifecycle Management Section & Table -->
+  <div class="glass-card" id="users-table" style="padding:1.75rem; margin-bottom:2rem;">
+    
+    <!-- Table Header with Search & Status Filters -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <h2 style="font-size:1.3rem; font-weight:800; margin:0; display:flex; align-items:center; gap:0.5rem;">
+          <i class="fa-solid fa-users-gear" style="color:var(--primary);"></i> User Lifecycle Management
+        </h2>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin:0.25rem 0 0 0;">
+          Direct administration, role elevation, and registration status control for external MongoDB Atlas accounts.
+        </p>
+      </div>
+
+      <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+        <!-- Search Input -->
+        <div class="search-box" style="width:240px;">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search name, email, role..." ng-model="vm.searchQuery">
+        </div>
+
+        <!-- Status Filter Dropdown -->
+        <select class="form-control" style="width:auto; padding:0.45rem 0.8rem; font-size:0.82rem;" ng-model="vm.statusFilter">
+          <option value="All">All Statuses</option>
+          <option value="Active">Active</option>
+          <option value="Verified">Verified</option>
+          <option value="Suspended">Suspended</option>
+        </select>
+
+        <span class="badge badge-primary" style="font-size:0.8rem;">{{ vm.users.length }} Accounts</span>
+      </div>
+    </div>
+
+    <!-- Table Container -->
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.88rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--glass-border); color:var(--text-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.5px;">
+            <th style="padding:0.85rem 1rem;">User</th>
+            <th style="padding:0.85rem 1rem;">Email Address</th>
+            <th style="padding:0.85rem 1rem;">Role</th>
+            <th style="padding:0.85rem 1rem;">Phone</th>
+            <th style="padding:0.85rem 1rem;">Registration Status</th>
+            <th style="padding:0.85rem 1rem;">Registered</th>
+            <th style="padding:0.85rem 1rem; text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="u in vm.users | filter:vm.filterUsers" style="border-bottom:1px solid rgba(255,255,255,0.05); transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
+            
+            <!-- User Column -->
+            <td style="padding:0.9rem 1rem; display:flex; align-items:center; gap:0.75rem;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;">
+                {{ u.name.charAt(0).toUpperCase() }}
+              </div>
+              <div>
+                <div style="font-weight:700; color:var(--text-dark);">{{ u.name }}</div>
+                <div style="font-size:0.72rem; color:var(--text-muted);" ng-if="u._id === $root.currentUser._id || u.email === $root.currentUser.email">
+                  <span style="color:#EC4899; font-weight:700;">(Current Session)</span>
+                </div>
+              </div>
+            </td>
+
+            <!-- Email Column -->
+            <td style="padding:0.9rem 1rem; color:var(--text-muted); font-family:monospace; font-size:0.84rem;">
+              {{ u.email }}
+            </td>
+
+            <!-- Role Column -->
+            <td style="padding:0.9rem 1rem;">
+              <span class="badge" ng-class="u.role | roleBadge" style="font-size:0.75rem;">
+                <i class="fa-solid" ng-class="{'fa-user-shield': u.role === 'admin', 'fa-user': u.role !== 'admin'}"></i>
+                {{ u.role | roleLabel }}
+              </span>
+            </td>
+
+            <!-- Phone Column -->
+            <td style="padding:0.9rem 1rem; color:var(--text-muted);">
+              {{ (u.phone | phoneFormat) || 'Not provided' }}
+            </td>
+
+            <!-- Registration Status Column -->
+            <td style="padding:0.9rem 1rem;">
+              <span class="badge" ng-class="u.status | statusBadge" style="font-size:0.75rem; padding:0.25rem 0.6rem;">
+                <i class="fa-solid" ng-class="u.status | statusIcon"></i>
+                {{ u.status || 'Active' }}
+              </span>
+            </td>
+
+            <!-- Registered Date Column -->
+            <td style="padding:0.9rem 1rem; color:var(--text-muted); font-size:0.8rem;">
+              {{ u.createdAt | timeAgo }}
+            </td>
+
+            <!-- Actions Column -->
+            <td style="padding:0.9rem 1rem; text-align:right;">
+              <div style="display:inline-flex; gap:0.45rem; align-items:center;">
+                
+                <!-- Modify User Account Details & Permissions Button -->
+                <button class="btn btn-secondary" style="padding:0.35rem 0.65rem; font-size:0.75rem; color:var(--primary);" ng-click="vm.openEditUserModal(u)" title="Modify Account Details & Permissions">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit
+                </button>
+
+                <!-- Quick Toggle Role Button -->
+                <button class="btn btn-secondary" style="padding:0.35rem 0.65rem; font-size:0.75rem;" ng-click="vm.toggleRole(u)" title="Quick Toggle Role (Admin/User)">
+                  <i class="fa-solid fa-arrows-rotate"></i> Role
+                </button>
+
+                <!-- Remove User Account Button -->
+                <button class="btn btn-danger" style="padding:0.35rem 0.65rem; font-size:0.75rem;" ng-click="vm.deleteUser(u)" ng-if="u.email !== $root.currentUser.email" title="Remove User Account From System">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+
+              </div>
+            </td>
+
+          </tr>
+
+          <!-- Empty State -->
+          <tr ng-if="vm.users.length === 0 && !vm.isLoading">
+            <td colspan="7" style="padding:2.5rem; text-align:center; color:var(--text-muted);">
+              <i class="fa-solid fa-users-slash" style="font-size:2rem; margin-bottom:0.75rem; display:block; opacity:0.5;"></i>
+              No user accounts retrieved from external MongoDB Atlas.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Security Cluster Status Panel -->
+  <div class="glass-card" id="cluster-status" style="padding:1.5rem 1.75rem; margin-bottom:2rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+      <h3 style="font-size:1.1rem; font-weight:800; margin:0; display:flex; align-items:center; gap:0.5rem;">
+        <i class="fa-solid fa-server" style="color:#10B981;"></i> Security Cluster & Infrastructure Telemetry
+      </h3>
+      <span class="badge badge-success"><i class="fa-solid fa-shield-halved"></i> 100% Fail-Closed Architecture</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem; font-size:0.85rem;" class="grid-3">
+      <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:12px; border:1px solid var(--glass-border);">
+        <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700;">Database Engine</div>
+        <div style="font-weight:700; color:var(--text-dark); margin-top:2px;">MongoDB Atlas (Cluster M0)</div>
+        <div style="font-size:0.72rem; color:#10B981; margin-top:4px;">Direct Node SRV Carrier Bypass Active</div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:12px; border:1px solid var(--glass-border);">
+        <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700;">Fail-Closed Policy</div>
+        <div style="font-weight:700; color:var(--text-dark); margin-top:2px;">HTTP 503 Rejection on DB Drop</div>
+        <div style="font-size:0.72rem; color:#10B981; margin-top:4px;">Zero Internal LocalStorage Leak</div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:12px; border:1px solid var(--glass-border);">
+        <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700;">Analytical Core Proxy</div>
+        <div style="font-weight:700; color:var(--text-dark); margin-top:2px;">Express Spatial A* Engine (Native)</div>
+        <div style="font-size:0.72rem; color:#818CF8; margin-top:4px;">Continuous Multi-Criteria Lighting Routing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: MODIFY USER ACCOUNT DETAILS & PERMISSIONS (ACTIONS COLUMN)       -->
+  <!-- ========================================================================= -->
+  <div ng-if="vm.showEditModal" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.7); backdrop-filter:blur(8px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:1rem;" class="fade-in">
+    <div class="glass-card" style="width:100%; max-width:520px; padding:2rem; background:var(--card-bg-solid); border:1px solid rgba(236,72,153,0.3); box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);">
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.75rem;">
+        <div>
+          <h3 style="font-size:1.25rem; font-weight:800; margin:0; color:var(--text-dark);">
+            <i class="fa-solid fa-user-gear" style="color:#EC4899;"></i> Modify User Account & Permissions
+          </h3>
+          <p style="font-size:0.8rem; color:var(--text-muted); margin:0.2rem 0 0 0;">Update account attributes or modify role permissions.</p>
+        </div>
+        <button ng-click="vm.closeEditUserModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--text-muted);">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form ng-submit="vm.saveUserChanges()">
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label class="form-label" style="font-size:0.82rem;"><i class="fa-solid fa-user"></i> Full Name</label>
+          <input type="text" class="form-control" ng-model="vm.editingUser.name" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label class="form-label" style="font-size:0.82rem;"><i class="fa-solid fa-envelope"></i> Email Address</label>
+          <input type="email" class="form-control" ng-model="vm.editingUser.email" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label class="form-label" style="font-size:0.82rem;"><i class="fa-solid fa-phone"></i> Mobile Phone Number</label>
+          <input type="tel" class="form-control" ng-model="vm.editingUser.phone">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem;" class="grid-2">
+          
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" style="font-size:0.82rem;"><i class="fa-solid fa-user-shield"></i> Permissions / Role</label>
+            <select class="form-control" ng-model="vm.editingUser.role" style="padding:0.55rem 0.75rem;">
+              <option value="user">Standard User</option>
+              <option value="admin">Administrator</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" style="font-size:0.82rem;"><i class="fa-solid fa-id-badge"></i> Registration Status</label>
+            <select class="form-control" ng-model="vm.editingUser.status" style="padding:0.55rem 0.75rem;">
+              <option value="Active">Active</option>
+              <option value="Verified">Verified</option>
+              <option value="Suspended">Suspended</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div style="display:flex; gap:0.75rem;">
+          <button type="button" class="btn btn-secondary btn-round" style="flex:1;" ng-click="vm.closeEditUserModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-round btn-ripple" style="flex:1; background:#EC4899; border-color:#EC4899;">
+            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: INCIDENT VERIFICATION QUEUE ("VERIFY CRIME INCIDENTS" BUTTON)   -->
+  <!-- ========================================================================= -->
+  <div ng-if="vm.showVerifyModal" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.75); backdrop-filter:blur(8px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:1.5rem 1rem;" class="fade-in">
+    <div class="glass-card" style="width:100%; max-width:850px; max-height:85vh; display:flex; flex-direction:column; padding:2rem; background:var(--card-bg-solid); border:1px solid rgba(236,72,153,0.35); box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);">
+      
+      <!-- Modal Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.75rem;">
+        <div>
+          <h3 style="font-size:1.35rem; font-weight:800; margin:0; display:flex; align-items:center; gap:0.5rem; color:var(--text-dark);">
+            <i class="fa-solid fa-clipboard-check" style="color:#EC4899;"></i> Crime Incident Verification Queue
+          </h3>
+          <p style="font-size:0.83rem; color:var(--text-muted); margin:0.2rem 0 0 0;">
+            Verify reported hazards, adjust risk severities, or dispatch authority patrols.
+          </p>
+        </div>
+        <button ng-click="vm.closeVerifyIncidentsModal()" style="background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--text-muted);">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Incidents List Container -->
+      <div style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:0.85rem; padding-right:0.25rem;">
+        
+        <div ng-repeat="crime in vm.crimesList" class="glass-card" style="padding:1rem 1.25rem; border-radius:14px; background:rgba(255,255,255,0.03); border:1px solid var(--glass-border);">
+          
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <h4 style="font-size:0.95rem; font-weight:700; margin:0; color:var(--text-dark);">{{ crime.type }}</h4>
+                <span class="badge" ng-class="crime.severity | severityBadge" style="font-size:0.7rem;">{{ crime.severity }}</span>
+                <span class="badge" ng-class="{'badge-success': crime.status === 'Verified' || crime.status === 'Police Patrol Added', 'badge-warning': crime.status === 'Reported'}" style="font-size:0.7rem;">
+                  {{ crime.status }}
+                </span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+                Reported by <b>{{ crime.reportedBy || 'Pedestrian' }}</b> • {{ crime.date }} ({{ crime.time }})
+                <span ng-if="crime.verifiedBy" style="color:#10B981; margin-left:6px;">• Verified by {{ crime.verifiedBy }}</span>
+              </div>
+            </div>
+
+            <!-- Verification Action Buttons -->
+            <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+              <button class="btn btn-primary" style="padding:0.35rem 0.75rem; font-size:0.75rem; background:#10B981; border-color:#10B981;" ng-click="vm.verifyIncidentAction(crime, 'Verified', crime.severity)" title="Confirm incident accuracy">
+                <i class="fa-solid fa-circle-check"></i> Verify Incident
+              </button>
+              <button class="btn btn-secondary" style="padding:0.35rem 0.75rem; font-size:0.75rem; color:var(--primary);" ng-click="vm.verifyIncidentAction(crime, 'Police Patrol Added', crime.severity)" title="Add active police patrol">
+                <i class="fa-solid fa-car-on"></i> Add Patrol
+              </button>
+              <button class="btn btn-secondary" style="padding:0.35rem 0.75rem; font-size:0.75rem;" ng-click="vm.verifyIncidentAction(crime, 'Resolved', crime.severity)" title="Mark incident resolved">
+                <i class="fa-solid fa-check"></i> Resolved
+              </button>
+            </div>
+          </div>
+
+          <p style="font-size:0.83rem; color:var(--text-muted); margin:0; line-height:1.4;">{{ crime.description }}</p>
+
+        </div>
+
+        <div ng-if="vm.crimesList.length === 0 && !vm.isLoadingCrimes" style="padding:2rem; text-align:center; color:var(--text-muted);">
+          <i class="fa-solid fa-shield-check" style="font-size:2rem; margin-bottom:0.5rem; display:block; color:#10B981;"></i>
+          No incident reports currently pending verification.
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="margin-top:1.25rem; border-top:1px solid var(--glass-border); padding-top:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.8rem; color:var(--text-muted);">All verification actions synchronize directly with the Leaflet Hotspot Map.</span>
+        <button class="btn btn-secondary btn-round" ng-click="vm.closeVerifyIncidentsModal()">Close Queue</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

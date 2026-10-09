@@ -1,0 +1,93 @@
+<!-- SafeWalk AI - Safe Route Page -->
+<div class="safe-route-container fade-in">
+  
+  <div style="display:grid; grid-template-columns:360px 1fr; gap:1.5rem;" class="grid-2">
+    
+    <!-- Left Controls Panel -->
+    <div class="glass-card" style="display:flex; flex-direction:column; gap:1.25rem;">
+      <div>
+        <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:0.25rem;"><i class="fa-solid fa-route" style="color:var(--primary);"></i> AI Safe Route Planner</h2>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Calculates optimal illumination, CCTV density, and police patrol coverage.</p>
+      </div>
+
+      <div class="form-group" style="margin-bottom:0.75rem;">
+        <label class="form-label"><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> Origin Location</label>
+        <input type="text" class="form-control" ng-model="vm.origin">
+      </div>
+
+      <div class="form-group" style="margin-bottom:0.75rem;">
+        <label class="form-label"><i class="fa-solid fa-flag-checkered" style="color:var(--accent);"></i> Destination</label>
+        <input type="text" class="form-control" ng-model="vm.destination">
+      </div>
+
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label class="form-label"><i class="fa-solid fa-person-walking"></i> Travel Mode</label>
+        <select class="form-control" ng-model="vm.travelMode">
+          <option value="Walking">Walking (SafeWalk Patrol)</option>
+          <option value="Transit">Public Transit & Metro</option>
+          <option value="Rideshare">Rideshare Safety Sync</option>
+          <option value="Bicycle">Bicycle Route</option>
+        </select>
+      </div>
+
+      <!-- Route Type Selection Cards -->
+      <div style="display:flex; flex-direction:column; gap:0.85rem;">
+        <!-- Safe Route Option Card -->
+        <div class="glass-card" 
+             ng-click="vm.selectRoute('safe')" 
+             ng-style="{'border': vm.selectedRoute==='safe' ? '2px solid #4F46E5' : '1px solid var(--glass-border)'}" 
+             style="cursor:pointer; padding:1rem; border-radius:14px; background:white;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <span style="font-weight:700; font-size:0.95rem; color:var(--primary);"><i class="fa-solid fa-shield-halved"></i> {{ vm.routes.safeRoute.name }}</span>
+            <span class="badge badge-success" style="font-size:0.7rem;">RECOMMENDED</span>
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-muted); display:flex; gap:12px; margin-bottom:0.5rem;">
+            <span><i class="fa-solid fa-clock"></i> {{ vm.routes.safeRoute.eta }}</span>
+            <span><i class="fa-solid fa-ruler"></i> {{ vm.routes.safeRoute.distance }}</span>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:4px;">
+            <span class="badge badge-primary" ng-repeat="f in vm.routes.safeRoute.features" style="font-size:0.65rem;">{{ f }}</span>
+          </div>
+        </div>
+
+        <!-- Fast Route Option Card -->
+        <div class="glass-card" 
+             ng-click="vm.selectRoute('fast')" 
+             ng-style="{'border': vm.selectedRoute==='fast' ? '2px solid #7C3AED' : '1px solid var(--glass-border)'}" 
+             style="cursor:pointer; padding:1rem; border-radius:14px; background:white;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <span style="font-weight:700; font-size:0.95rem; color:var(--secondary);"><i class="fa-solid fa-bolt"></i> {{ vm.routes.fastRoute.name }}</span>
+            <span class="badge badge-warning" style="font-size:0.7rem;">SHORTCUT</span>
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-muted); display:flex; gap:12px; margin-bottom:0.5rem;">
+            <span><i class="fa-solid fa-clock"></i> {{ vm.routes.fastRoute.eta }}</span>
+            <span><i class="fa-solid fa-ruler"></i> {{ vm.routes.fastRoute.distance }}</span>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:4px;">
+            <span class="badge badge-danger" ng-repeat="f in vm.routes.fastRoute.features" style="font-size:0.65rem;">{{ f }}</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-round btn-lg btn-ripple" ng-click="vm.startNavigation()" style="width:100%; margin-top:0.5rem;">
+        <i class="fa-solid fa-location-arrow"></i> Start Navigation
+      </button>
+    </div>
+
+    <!-- Right Map View -->
+    <div class="glass-card" style="display:flex; flex-direction:column; padding:1rem; height:calc(100vh - 140px);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+        <div style="font-size:0.9rem; font-weight:700; display:flex; gap:1rem;">
+          <span>Active Layer: <b style="color:var(--primary);">Blue Safe Route Overlay</b></span>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.75rem;"><i class="fa-solid fa-fire"></i> Heat Risk Overlay</button>
+        </div>
+      </div>
+
+      <div interactive-map id="safe-route-map" map-mode="safe-route" style="flex:1; border-radius:14px; overflow:hidden;"></div>
+    </div>
+
+  </div>
+
+</div>

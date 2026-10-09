@@ -1,0 +1,70 @@
+<!-- SafeWalk AI - Live Location Sharing Page -->
+<div class="live-location-container fade-in">
+  
+  <div style="display:grid; grid-template-columns:340px 1fr; gap:1.5rem;" class="grid-2">
+    
+    <!-- Left Control Panel -->
+    <div class="glass-card" style="display:flex; flex-direction:column; gap:1.25rem;">
+      <div>
+        <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:0.25rem;"><i class="fa-solid fa-location-crosshairs" style="color:var(--primary);"></i> Live Location Broadcast</h2>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Encrypted real-time GPS telemetry sent to trusted emergency guardians.</p>
+      </div>
+
+      <!-- Sharing Toggle Button Card -->
+      <div class="glass-card" style="text-align:center; padding:1.25rem; background:white;">
+        <span class="badge" ng-class="{'badge-success': vm.isSharing, 'badge-warning': !vm.isSharing}" style="font-size:0.8rem; margin-bottom:0.75rem;">
+          <i class="fa-solid fa-circle" style="font-size:6px;"></i> STATUS: {{ vm.isSharing ? 'BROADCASTING LIVE' : 'SHARING OFF' }}
+        </span>
+
+        <button class="btn btn-round btn-lg btn-ripple" 
+                ng-class="{'btn-danger': vm.isSharing, 'btn-primary': !vm.isSharing}" 
+                ng-click="vm.toggleSharing()" 
+                style="width:100%; margin-top:0.5rem;">
+          <i class="fa-solid" ng-class="{'fa-stop': vm.isSharing, 'fa-play': !vm.isSharing}"></i> 
+          {{ vm.isSharing ? 'Stop Location Sharing' : 'Start Sharing Live Location' }}
+        </button>
+      </div>
+
+      <!-- Telemetry Live Status Indicators -->
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; text-align:center;">
+        <div class="glass-card" style="padding:0.75rem 0.25rem;">
+          <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">SPEED</div>
+          <div style="font-size:1rem; font-weight:800; color:var(--primary); margin-top:2px;">{{ vm.tracking.speed }}</div>
+        </div>
+
+        <div class="glass-card" style="padding:0.75rem 0.25rem;">
+          <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">BATTERY</div>
+          <div style="font-size:1rem; font-weight:800; color:var(--success); margin-top:2px;">{{ vm.tracking.battery }}</div>
+        </div>
+
+        <div class="glass-card" style="padding:0.75rem 0.25rem;">
+          <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">SIGNAL</div>
+          <div style="font-size:0.85rem; font-weight:800; color:var(--secondary); margin-top:2px;">{{ vm.tracking.signal }}</div>
+        </div>
+      </div>
+
+      <!-- Copy Share Link Box -->
+      <div class="glass-card" style="background:rgba(255,255,255,0.6);">
+        <label class="form-label" style="font-size:0.8rem;"><i class="fa-solid fa-link"></i> Public Tracking Link</label>
+        <div style="display:flex; gap:0.5rem; margin-top:0.35rem;">
+          <input type="text" class="form-control" style="font-size:0.75rem; padding:0.5rem;" ng-model="vm.tracking.shareUrl" readonly>
+          <button class="btn btn-secondary" style="padding:0.5rem 0.75rem; font-size:0.8rem;" ng-click="vm.copyShareLink()">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Live Tracking Map -->
+    <div class="glass-card" style="display:flex; flex-direction:column; padding:1rem; height:calc(100vh - 140px);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+        <span style="font-size:0.9rem; font-weight:700;"><i class="fa-solid fa-tower-cell" style="color:var(--primary);"></i> Live Radar GPS Sync</span>
+        <span class="badge badge-primary" ng-if="vm.isSharing"><i class="fa-solid fa-spinner spinner" style="width:12px; height:12px;"></i> Transmitting Every 3 Seconds</span>
+      </div>
+
+      <div interactive-map id="live-location-map" map-mode="live" style="flex:1; border-radius:14px; overflow:hidden;"></div>
+    </div>
+
+  </div>
+
+</div>

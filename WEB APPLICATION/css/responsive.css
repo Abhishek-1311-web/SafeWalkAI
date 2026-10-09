@@ -1,0 +1,134 @@
+/* SafeWalk AI - Responsive Design Utilities */
+
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 220px;
+  }
+
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Landing tweaks to avoid overlap with sidebar on desktop */
+@media (min-width: 992px) {
+  .landing-container {
+    max-width: 980px;
+  }
+
+  .landing-container .hero-split h1 {
+    font-size: 2.6rem;
+  }
+
+  .landing-container .hero-mockup .glass-card {
+    width: 260px !important;
+    height: 480px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    z-index: 999;
+    width: min(85vw, 280px);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .main-wrapper {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+
+  .top-navbar {
+    padding: 0.9rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    height: auto;
+  }
+
+  .top-navbar > div:first-child {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .search-box {
+    width: 100%;
+    max-width: none;
+    flex: 1;
+  }
+
+  .navbar-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  #mobileMenuBtn {
+    display: inline-flex !important;
+  }
+
+  .page-view {
+    padding: 1rem;
+    overflow-x: hidden;
+  }
+
+  .page-view > div {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-split, .split-screen {
+    flex-direction: column !important;
+  }
+
+  .hero-mockup {
+    margin-top: 2rem;
+  }
+
+  .live-location-container .glass-card,
+  .safe-route-container .glass-card,
+  .crime-map-container .glass-card {
+    height: auto !important;
+    min-height: auto;
+  }
+
+  .live-location-container .glass-card[style*="height:calc(100vh - 140px);"],
+  .safe-route-container .glass-card[style*="height:calc(100vh - 140px);"],
+  .crime-map-container .glass-card[style*="height:calc(100vh - 140px);"] {
+    height: 360px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-box {
+    display: none;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .brand-text {
+    font-size: 1.05rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.1rem;
+    font-size: 0.85rem;
+  }
+
+  .glass-card {
+    padding: 1rem;
+  }
+
+  .page-view {
+    padding: 0.75rem;
+  }
+}
